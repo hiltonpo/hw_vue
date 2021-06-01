@@ -1,32 +1,186 @@
 <template>
-  <div class="hello">
-    panel
-  </div>
+    <div id="info-panel" :style="position" :class="{'new': $store.state.dateId != null}">
+      <div class="close">x</div>
+
+      <form>
+        <input type="hidden" name="id" />
+        <div class="title">
+          <label>evenet</label>
+          <input type="text" name="title" v-model="$store.state.eventInfo.title"/>
+        </div>
+        <div class="error-msg">
+          <div class="alert alert-damger">error</div>
+        </div>
+        <div class="time-picker">
+          <div class="selected-date">
+            <span class="month">{{dateWithMonth}}</span>/<span class="date"></span>
+            <input type="hidden" name="year" />
+            <input type="hidden" name="month" />
+            <input type="hidden" name="date" />
+          </div>
+          <div class="from">
+            <label for="from">from</label><br />
+            <input id="from" type="time" name="start_time" v-model="$store.state.eventInfo.start_time"/>
+          </div>
+          <div class="to">
+            <label for="to">from</label><br />
+            <input id="to" type="time" name="end_time" v-model="$store.state.eventInfo.end_time"/>
+          </div>
+        </div>
+        <div class="description">
+          <label>description</label><br />
+          <textarea name="description" id="description" v-model="$store.state.eventInfo.description"></textarea>
+        </div>
+      </form>
+
+      <div class="buttons clearfix">
+        <button class="create" @click="createEvent">create</button>
+        <!-- <button class="update" @click="updateEvent">update</button> -->
+        <button class="cancel" @click="closePanel">cancel</button>
+        <!-- <button class="delete" @click="removeEvent">delete</button> -->
+      </div>
+    </div>
 </template>
 
 <script>
 export default {
   name: "panel",
-  props: {
-    msg: String,
+  props: ['pagex','pagey'],
+  data() {
+    return{
+      position: {
+        left: this.pagex+'px',
+        top: this.pagey+'px',
+
+      },
+      dateWithMonth:[],
+
+
+
+
+
+
+
+    }
   },
+  // computed:{
+  //   update
+
+  // },
+
+  methods:{
+    timeformate() {
+      let newdate = new Date();
+      let month = newdate.getMonth() + 1;
+      this.dateWithMonth = month 
+    },
+
+    createEvent() {
+      this.$store.commit('create')
+      this.$store.commit('closePanel')
+      
+
+
+    },
+
+    // updateEvent() {
+    //   11
+    // },
+
+    closePanel() {
+      this.$store.commit('closePanel')
+
+    },
+
+    // removeEvent() {
+    //   22
+
+    // },
+
+
+  },
+  created() {
+    this.timeformate()
+  },
+
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+#info-panel {
+    position: fixed;
+    width: 280px;
+    background: white;
+    border: 1px solid #ccc;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+
+
+#info-panel label {
+    font-size: .8rem;
+    color: #ccc;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+#info-panel .close {
+    position: relative;
+    cursor: pointer;
+    top: 10px;
+    right: 10px;
 }
-a {
-  color: #42b983;
+
+#info-panel .title, #info-panel .time-picker {
+    border-bottom: 1px solid #ccc;
+}
+
+#info-panel .title, #info-panel .time-picker, #info-panel .description {
+    padding: 10px;
+}
+
+.error-msg {
+    display: none;
+}
+
+.error-msg.open {
+    display: block;
+}
+
+.selected-date {
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+#description {
+    width: 100%;
+}
+
+#info-panel button {
+    display: none;
+    border: none;
+    padding: 10px;
+    background: rgba(129, 127, 127, 0.747);
+    color: white;
+    cursor: pointer;
+}
+
+#info-panel.new button.create, #info-panel.new button.cancel {
+    display: block;
+    width: 50%;
+    float: left;
+}
+
+#info-panel.update button.update, #info-panel.update button.cancel, #info-panel.update button.delete {
+    display: block;
+    width: 50%;
+    float: left;
+}
+
+#info-panel.update button.delete {
+    width: 100%;
+    background: #c21717;
+}
+
+#info-panel.new button.create, #info-panel.update button.create, #info-panel.update button.update {
+    background: #74be00;
 }
 </style>

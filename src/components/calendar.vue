@@ -10,31 +10,20 @@
 
     </div>
     <div id="dates" class="clearfix">
-      <div class="date-block"  v-for="(date, index) in getDaysOfMonth" :key="index"
-      :class="{'empty': date == null}">
+      <div class="date-block"  v-for="(date, index) in getDaysOfMonth" :key="index" 
+      :class="{'empty': date == null}" @dblclick="openPanel($event, index)">
         <div class="date">{{date}}</div>
-        <div class="events"></div>
+        <events :event="item" :date="date" v-for="(item, index) in $store.state.eventData" :key=index></events>
 
       </div>
     </div>
 
-
-
-
-    <!-- <div id="dates" class="clearfix">
-        <?php foreach ($dates as $key => $date): ?>
-            <div class="date-block <?= (is_null($date))? 'empty' : '' ?>" data-date="<?= $date?>">
-                <div class="date"><?= $date ?></div>
-                <div class="events">
-                </div>
-            </div>
-        <?php endforeach ?>
-    </div> -->
  </div>
 </template>
 
 <script>
 import nowtime from './nowtime.vue'
+import events from './events'
 
 export default {
   name: "calendar",
@@ -43,6 +32,7 @@ export default {
   },
   components: {
     nowtime,
+    events
   },
   data(){
     return{
@@ -51,46 +41,11 @@ export default {
 
 
 
+
+
     };
   },
-  // methods:{
-  //   getDays() {
-  //     var year = new Date().getFullYear();
-  //     var month = new Date().getMonth() + 1;
-  //     // 這個月有幾天
-  //     var days = new Date(year, month, 0).getDate();
 
-  //     // calculatee paddings
-
-  //     // 本月1號是星期幾? (0~6)
-  //     let firstDateOfTheMonth = new Date(year, month-1, 1).getDay();
-  //     // 本月最後一天是星期幾? (0~6)
-  //     let lastDateOfTheMonth = new Date(year, month-1, days).getDay();
-  //     // calendar 要填的 padding
-  //     let frontPaddings = firstDateOfTheMonth;
-  //     let backPaddings = 6 - lastDateOfTheMonth;
-
-  //     let front = [];
-  //     let totalday= [];
-  //     let back = [];
-
-  //     // 填1號前面的空格
-  //     for (let i=0; i < frontPaddings; i++) {
-  //       front[i] = null;
-  //       }
-  //     // 填 1-31
-  //     for (let i=0; i < days; i++) {
-  //       totalday[i] = i+1;
-  //       }
-  //     // 填 後面的 padding
-  //     for (let i=0; i < backPaddings; i++) {
-  //       back[i] = null;
-  //       }
-  //     this.dates = front.concat(totalday, back)
-
-      
-  //   }
-  // },
   computed:{
     getDaysOfMonth() {
       var year = new Date().getFullYear();
@@ -102,6 +57,7 @@ export default {
 
       // 本月1號是星期幾? (0~6)
       let firstDateOfTheMonth = new Date(year, month-1, 1).getDay();
+
       // 本月最後一天是星期幾? (0~6)
       let lastDateOfTheMonth = new Date(year, month-1, days).getDay();
       // calendar 要填的 padding
@@ -133,6 +89,31 @@ export default {
     
 
   },
+  methods:{
+    openPanel($event, index) {
+      var year = new Date().getFullYear();
+      var month = new Date().getMonth() + 1;
+      let pig = new Date(year, month-1, 1).getDay();
+      this.$emit("isOpen", {right:true, xpos:$event.pageX, ypos:$event.pageY, id:index-pig+1})
+
+    
+
+
+
+
+
+
+    },
+
+    // updatePanel() {
+      
+    // }
+    // record(index) {
+    //   this.$store.state.dateId = index
+    //   console.log(index)
+
+    // }
+  }
 };
 </script>
 
@@ -172,19 +153,7 @@ export default {
     background-color: #eee;
 }
 
-.event {
-    margin-bottom: 2px;
-    background: orange;
-    color:white;
-    padding: 0 6px;
-    border-radius: 12px;
-}
 
-.event .title {
-    float: left;
-}
 
-.event .from {
-    float: right;
-}
+
 </style>

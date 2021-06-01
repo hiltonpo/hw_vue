@@ -1,6 +1,6 @@
 <template>
-  <calendar></calendar>
-  <panel></panel>
+  <calendar @isOpen="openPanel"></calendar>
+  <panel v-if="$store.state.open" :pagex="xposition" :pagey="yposition"></panel>
 </template>
 
 <script>
@@ -15,17 +15,50 @@ export default {
   components: {
     calendar,
     panel,
+  },
+  data() {
+    return{
+
+      xposition:[],
+      yposition:[]
+
+    }
+
+  },
+  methods:{
+    openPanel(val) {
+      this.$store.state.open = val.right
+      this.$store.state.dateId = val.id
+      this.xposition = val.xpos
+      this.yposition = val.ypos
+      console.log(this.$store.state.dateId)
+     
+
+    // 設定兩種情況，如果是空物件or存在事件
+      // if (this.$store.state.eventData[this.$store.state.eventId]) {
+ 
+      //   this.$store.state.eventInfo = {
+      //     date:null,
+      //     title:null,
+      //     start_time:null,
+      //     end_time:null,
+      //     description:null
+      //   };
+      // }
+      // else {
+      //   this.$store.state.eventInfo = Object.assign({}, this.$store.state.eventData[this.$store.state.eventId]);
+      // }
+
+
+
+
+    }
+    
+
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
