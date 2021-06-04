@@ -3,8 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     open:false,
-
-
+    isNew:true,
 
     eventId:[],
     dateId:[],
@@ -42,6 +41,30 @@ export default createStore({
       },
 
       console.log(state.eventData)
+
+    },
+
+    // Update(state) {
+
+    // },
+
+    newPanel (state) {
+      state.isNew = true
+      state.eventInfo = {
+        date:null,
+        title:null,
+        start_time:null,
+        end_time:null,
+        description:null
+  
+      },
+      console.log(state.eventData)
+
+    },
+
+    updatePanel (state) {
+      state.isNew = false
+
 
     },
 

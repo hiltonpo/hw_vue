@@ -11,9 +11,10 @@
     </div>
     <div id="dates" class="clearfix">
       <div class="date-block"  v-for="(date, index) in getDaysOfMonth" :key="index" 
-      :class="{'empty': date == null}" @dblclick="openPanel($event, index)">
+      :class="{'empty': date == null}" @dblclick.capture="openPanel($event, index)">
         <div class="date">{{date}}</div>
-        <events :event="item" :date="date" v-for="(item, index) in $store.state.eventData" :key=index></events>
+        <events :event="item" :date="date" v-for="(item, index) in $store.state.eventData" :key=index
+        ></events>
 
       </div>
     </div>
@@ -95,19 +96,13 @@ export default {
       var month = new Date().getMonth() + 1;
       let pig = new Date(year, month-1, 1).getDay();
       this.$emit("isOpen", {right:true, xpos:$event.pageX, ypos:$event.pageY, id:index-pig+1})
-
-    
-
-
-
-
-
+      this.$store.commit('newPanel')
 
     },
 
-    // updatePanel() {
-      
-    // }
+
+
+
     // record(index) {
     //   this.$store.state.dateId = index
     //   console.log(index)

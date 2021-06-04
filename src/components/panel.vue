@@ -1,6 +1,6 @@
 <template>
-    <div id="info-panel" :style="position" :class="{'new': $store.state.dateId != null}">
-      <div class="close">x</div>
+    <div id="info-panel" :style="position" :class="[$store.state.isNew? 'new' : 'update']">
+      <div class="close" @click="closePanel">x</div>
 
       <form>
         <input type="hidden" name="id" />
@@ -35,9 +35,9 @@
 
       <div class="buttons clearfix">
         <button class="create" @click="createEvent">create</button>
-        <!-- <button class="update" @click="updateEvent">update</button> -->
+        <button class="update" @click="updateEvent">update</button>
         <button class="cancel" @click="closePanel">cancel</button>
-        <!-- <button class="delete" @click="removeEvent">delete</button> -->
+        <button class="delete" @click="removeEvent">delete</button>
       </div>
     </div>
 </template>
@@ -61,12 +61,14 @@ export default {
 
 
 
+
+
     }
   },
-  // computed:{
-  //   update
+  computed:{
 
-  // },
+
+  },
 
   methods:{
     timeformate() {

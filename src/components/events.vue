@@ -1,6 +1,6 @@
 <template>
         <!-- 將eventData以v-for(event, index)呈現，並將個別資料的date放置相對應的日期 -->
-        <div class="events clearfix" v-if="event.date == date">
+        <div class="events clearfix" v-if="event.date == date" @dblclick="updatePanel(event)">
             <div class="title">{{event.title}}</div>
             <div class="from">{{event.start_time}}</div>
         </div>
@@ -18,6 +18,11 @@ export default {
 
   },
   methods: {
+    updatePanel(event) {
+      this.$store.commit('updatePanel')
+      this.$store.state.eventInfo = Object.assign({}, event);
+
+    }
 
   },
 };
