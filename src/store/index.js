@@ -7,6 +7,8 @@ export default createStore({
 
     eventId:[],
     dateId:[],
+    currentId:[],
+
 
     eventData:[],
     eventInfo:{
@@ -64,8 +66,14 @@ export default createStore({
 
     updatePanel (state) {
       state.isNew = false
+    },
 
+    updateEvent(state) {
+      state.eventData[state.currentId] = Object.assign({}, state.eventInfo);
+    },
 
+    removeEvent(state) {
+      state.eventData.splice(state.currentId, 1);
     },
 
   },

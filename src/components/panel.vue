@@ -85,19 +85,21 @@ export default {
 
     },
 
-    // updateEvent() {
-    //   11
-    // },
+    updateEvent() {
+      this.$store.commit('updateEvent')
+      this.$store.commit('closePanel')
+    },
 
     closePanel() {
       this.$store.commit('closePanel')
 
     },
 
-    // removeEvent() {
-    //   22
+    removeEvent() {
+      this.$store.commit('removeEvent')
+      this.$store.commit('closePanel')
 
-    // },
+    },
 
 
   },

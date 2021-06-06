@@ -13,7 +13,7 @@
       <div class="date-block"  v-for="(date, index) in getDaysOfMonth" :key="index" 
       :class="{'empty': date == null}" @dblclick.capture="openPanel($event, index)">
         <div class="date">{{date}}</div>
-        <events :event="item" :date="date" v-for="(item, index) in $store.state.eventData" :key=index
+        <events :event="item" :date="date" v-for="(item, index) in $store.state.eventData" :key=index :currentId=index
         ></events>
 
       </div>
