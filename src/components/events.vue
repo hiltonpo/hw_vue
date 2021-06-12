@@ -12,21 +12,25 @@ export default {
   props: ['event','date','currentId'],
   data() {
     return {
-
-
+      
     };
 
   },
   methods: {
     updatePanel(event, currentId) {
-      this.$store.commit('updatePanel')
       this.$store.state.eventInfo = Object.assign({}, event);
-      this.$store.state.currentId = currentId
+      this.$store.state.currentId = currentId;
+      this.$store.commit('updatePanel');
 
 
-    }
+    },
+
+
 
   },
+
+
+
 };
 </script>
 

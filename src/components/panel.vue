@@ -8,12 +8,9 @@
           <label>evenet</label>
           <input type="text" name="title" v-model="$store.state.eventInfo.title"/>
         </div>
-        <div class="error-msg">
-          <div class="alert alert-damger">error</div>
-        </div>
         <div class="time-picker">
           <div class="selected-date">
-            <span class="month">{{dateWithMonth}}</span>/<span class="date"></span>
+            <span class="month">{{currentMonth}}</span>/<span class="date">{{currentDate}}</span>
             <input type="hidden" name="year" />
             <input type="hidden" name="month" />
             <input type="hidden" name="date" />
@@ -53,7 +50,8 @@ export default {
         top: this.pagey+'px',
 
       },
-      dateWithMonth:[],
+      currentMonth:[],
+      currentDate:this.$store.state.dateId
 
 
 
@@ -74,7 +72,8 @@ export default {
     timeformate() {
       let newdate = new Date();
       let month = newdate.getMonth() + 1;
-      this.dateWithMonth = month 
+      this.currentMonth = month 
+      
     },
 
     createEvent() {

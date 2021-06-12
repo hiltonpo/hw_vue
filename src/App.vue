@@ -1,4 +1,5 @@
 <template>
+  <div id="header">{{monthTitle}}</div>
   <calendar @isOpen="openPanel"></calendar>
   <panel v-if="$store.state.open" :pagex="xposition" :pagey="yposition"></panel>
 </template>
@@ -18,9 +19,9 @@ export default {
   },
   data() {
     return{
-
+      monthTitle:[],
       xposition:[],
-      yposition:[]
+      yposition:[],
 
     }
 
@@ -33,32 +34,26 @@ export default {
       this.yposition = val.ypos
       console.log(this.$store.state.dateId)
      
-
-    // 設定兩種情況，如果是空物件or存在事件
-      // if (this.$store.state.eventData[this.$store.state.eventId]) {
- 
-      //   this.$store.state.eventInfo = {
-      //     date:null,
-      //     title:null,
-      //     start_time:null,
-      //     end_time:null,
-      //     description:null
-      //   };
-      // }
-      // else {
-      //   this.$store.state.eventInfo = Object.assign({}, this.$store.state.eventData[this.$store.state.eventId]);
-      // }
-
-
-
-
-    }
-    
-
-  }
+    },
+    timeformate() {
+      let newdate = new Date();
+      let year = newdate.getFullYear();
+      let month = newdate.getMonth() + 1;
+      this.monthTitle = year + "年" + month + "月"
+    },
+  },
+  created() {
+    this.timeformate()
+  },
 }
 </script>
 
 <style>
+#header {
+    font-size: 2.4rem;
+    font-weight: bold;
+    text-align: center;
+
+}
 
 </style>

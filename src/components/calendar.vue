@@ -1,8 +1,5 @@
 <template>
   <div id="calendar" >
-    <div id="header">
-        <nowtime></nowtime>
-    </div>
     <div id="days" class="clearfix">
         <div class="day" v-for="(item, index) in week" :key="index">
         {{item}}
@@ -11,9 +8,9 @@
     </div>
     <div id="dates" class="clearfix">
       <div class="date-block"  v-for="(date, index) in getDaysOfMonth" :key="index" 
-      :class="{'empty': date == null}" @dblclick.capture="openPanel($event, index)">
+      :class="{'empty': date == null}" @dblclick.capture="openPanel($event, index, date)">
         <div class="date">{{date}}</div>
-        <events :event="item" :date="date" v-for="(item, index) in $store.state.eventData" :key=index :currentId=index
+        <events :event="item" :date="date" v-for="(item, index) in orderevent" :key=index :currentId=index
         ></events>
 
       </div>
@@ -23,7 +20,6 @@
 </template>
 
 <script>
-import nowtime from './nowtime.vue'
 import events from './events'
 
 export default {
@@ -32,17 +28,12 @@ export default {
     msg: String,
   },
   components: {
-    nowtime,
     events
   },
   data(){
     return{
       week:['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
-
-
-
-
-
+      monthTitle:[]
 
     };
   },
@@ -82,33 +73,45 @@ export default {
       for (let i=0; i < backPaddings; i++) {
         back[i] = null;
         }
-      dates = front.concat(totalday, back)
+      dates = front.concat(totalday, back);
 
       return dates;
 
-    }
-    
+    },
+    orderevent() {
+      function compare(a,b) {
+        const A = a.start_time.split(':');
+        const B = b.start_time.split(':');
 
+        let comparsion = [];
+        if ( A[0] > B[0] || (A[0] == B[0] && A[1] > B[1]) ) {
+          comparsion = 1;
+        }
+        else {
+          comparsion = -1;
+        }
+        return comparsion ;
+      }
+
+      let order = this.$store.state.eventData.slice().sort(compare);
+      return order;
+    },  
   },
   methods:{
-    openPanel($event, index) {
+    openPanel($event, index, date) {
       var year = new Date().getFullYear();
       var month = new Date().getMonth() + 1;
-      let pig = new Date(year, month-1, 1).getDay();
-      this.$emit("isOpen", {right:true, xpos:$event.pageX, ypos:$event.pageY, id:index-pig+1})
-      this.$store.commit('newPanel')
+      let day = new Date(year, month-1, 1).getDay();
+      
+      if (date!=null) {
+        this.$emit("isOpen", {right:true, xpos:$event.pageX, ypos:$event.pageY, id:index-day+1});
+        this.$store.commit('newPanel');
+      }
+
 
     },
+  },
 
-
-
-
-    // record(index) {
-    //   this.$store.state.dateId = index
-    //   console.log(index)
-
-    // }
-  }
 };
 </script>
 
@@ -119,11 +122,6 @@ export default {
     width: 90%;
 }
 
-#header {
-    font-size: 2.4rem;
-    font-weight: bold;
-
-}
 
 .day, .date-block {
     float: left;

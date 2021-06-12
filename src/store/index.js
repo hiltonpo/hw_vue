@@ -30,19 +30,24 @@ export default createStore({
     },
     // 創建event後建立ID，並將資料存在eventData陣列裡
     create(state) {
-      state.eventInfo.date = state.dateId  //dateId代表每個事件的date日期
-      state.eventId = state.eventData.length  //創建event時給予id
-      state.eventData[state.eventId] = Object.assign({}, state.eventInfo);
-      state.eventInfo = {
-        date:null,
-        title:null,
-        start_time:null,
-        end_time:null,
-        description:null
-  
-      },
+      if (state.eventInfo.start_time < state.eventInfo.end_time) {
+        state.eventInfo.date = state.dateId;  //dateId代表每個事件的date日期
+        state.eventId = state.eventData.length;  //創建event時給予id
+        state.eventData[state.eventId] = Object.assign({}, state.eventInfo);
+        state.eventInfo = {
+          date:null,
+          title:null,
+          start_time:null,
+          end_time:null,
+          description:null
+        };
+      }
 
-      console.log(state.eventData)
+      else {
+        alert('error');
+      }
+
+      console.log(state.eventData);
 
     },
 
@@ -51,7 +56,7 @@ export default createStore({
     // },
 
     newPanel (state) {
-      state.isNew = true
+      state.isNew = true;
       state.eventInfo = {
         date:null,
         title:null,
@@ -59,8 +64,8 @@ export default createStore({
         end_time:null,
         description:null
   
-      },
-      console.log(state.eventData)
+      };
+      console.log(state.eventData);
 
     },
 
@@ -69,12 +74,23 @@ export default createStore({
     },
 
     updateEvent(state) {
-      state.eventData[state.currentId] = Object.assign({}, state.eventInfo);
+      if (state.eventInfo.start_time < state.eventInfo.end_time) {
+        state.eventData[state.currentId] = Object.assign({}, state.eventInfo);
+      }
+      else {
+        alert('error');
+      }
+      
     },
 
     removeEvent(state) {
-      state.eventData.splice(state.currentId, 1);
+      var result = confirm('Do you really want to delete?');
+      if (result) {
+        state.eventData.splice(state.currentId, 1);
+      }
     },
+
+
 
   },
   actions: {
