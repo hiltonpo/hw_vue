@@ -1,6 +1,6 @@
 <template>
         <!-- 將eventData以v-for(event, index)呈現，並將個別資料的date放置相對應的日期 -->
-        <div class="events clearfix" v-if="event.date == date" @dblclick="updatePanel(event, currentId)">
+        <div class="events clearfix flex-fill" v-if="event.date == date" @dblclick="updatePanel(event)">
             <div class="title">{{event.title}}</div>
             <div class="from">{{event.start_time}}</div>
         </div>
@@ -9,7 +9,7 @@
 <script>
 export default {
   name: "events",
-  props: ['event','date','currentId'],
+  props: ['event','date'],
   data() {
     return {
       
@@ -17,13 +17,17 @@ export default {
 
   },
   methods: {
-    updatePanel(event, currentId) {
+    updatePanel(event) {
       this.$store.state.eventInfo = Object.assign({}, event);
-      this.$store.state.currentId = currentId;
+      this.$store.state.currentEventIndex = this.$store.state.eventData.findIndex(item=> item.id === event.id);
+      this.$store.state.currentId = event.id;
+      console.log(event.id);
+      console.log(this.$store.state.currentEventIndex);
       this.$store.commit('updatePanel');
 
 
     },
+
 
 
 
@@ -42,14 +46,18 @@ export default {
     color:white;
     padding: 0 6px;
     border-radius: 12px;
+    flex-grow: inherit;
 }
 
 .events .title {
     float: left;
+    font-size: 10px;
+
 }
 
 .events .from {
     float: right;
+    font-size: 10px;
 }
 
 </style>

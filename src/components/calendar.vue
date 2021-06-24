@@ -10,7 +10,7 @@
       <div class="date-block"  v-for="(date, index) in getDaysOfMonth" :key="index" 
       :class="{'empty': date == null}" @dblclick.capture="openPanel($event, index, date)">
         <div class="date">{{date}}</div>
-        <events :event="item" :date="date" v-for="(item, index) in orderevent" :key=index :currentId=index
+        <events :event="item" :date="date" v-for="(item, index) in orderevent" :key=index 
         ></events>
 
       </div>
@@ -20,12 +20,12 @@
 </template>
 
 <script>
+import axios from 'axios';
 import events from './events'
 
 export default {
   name: "calendar",
   props: {
-    msg: String,
   },
   components: {
     events
@@ -107,12 +107,27 @@ export default {
         this.$emit("isOpen", {right:true, xpos:$event.pageX, ypos:$event.pageY, id:index-day+1});
         this.$store.commit('newPanel');
       }
-
-
     },
+    // ajax call -- read data
+    fetchAlldata() {
+      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/read.php',
+      
+      {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+      .then(response => {
+        console.log(response.data)
+        this.$store.state.eventData = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      });
+
+    }
+  },
+  created() {
+    this.fetchAlldata();
   },
 
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

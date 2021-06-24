@@ -8,6 +8,10 @@
           <label>evenet</label>
           <input type="text" name="title" v-model="$store.state.eventInfo.title"/>
         </div>
+        <div class="error-msg" :class="[errorMessage ? 'open' : '']">
+          <div class="alert alert-danger">{{errorMessage}}</div>
+          
+        </div>
         <div class="time-picker">
           <div class="selected-date">
             <span class="month">{{currentMonth}}</span>/<span class="date">{{currentDate}}</span>
@@ -40,7 +44,10 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios'
+
+
+export default {  
   name: "panel",
   props: ['pagex','pagey'],
   data() {
@@ -51,7 +58,8 @@ export default {
 
       },
       currentMonth:[],
-      currentDate:this.$store.state.dateId
+      currentDate:this.$store.state.dateId,
+      errorMessage:'',
 
 
 
@@ -66,6 +74,8 @@ export default {
   computed:{
 
 
+
+
   },
 
   methods:{
@@ -78,15 +88,43 @@ export default {
 
     createEvent() {
       this.$store.commit('create')
-      this.$store.commit('closePanel')
-      
 
+      // axios call create.php
+      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/create.php', {
+        title: this.$store.state.eventInfo.title,
+        start_time: this.$store.state.eventInfo.start_time,
+        end_time: this.$store.state.eventInfo.end_time,
+        description: this.$store.state.eventInfo.description,
+        date: this.$store.state.eventInfo.date,
+        }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+        .then(response => {
+          console.log(response)
+          this.$store.state.eventData[this.$store.state.eventIndex].id = response.data['id']
+          this.$store.commit('closePanel')
+          })
+        .catch(error => {
+          this.errorMessage = error.response.data
+          });
+      
 
     },
 
     updateEvent() {
       this.$store.commit('updateEvent')
-      this.$store.commit('closePanel')
+      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/update.php', {
+        title: this.$store.state.eventInfo.title,
+        start_time: this.$store.state.eventInfo.start_time,
+        end_time: this.$store.state.eventInfo.end_time,
+        description: this.$store.state.eventInfo.description,
+        date: this.$store.state.eventInfo.date,
+        }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+        .then(response => {
+          console.log(response)
+          this.$store.commit('closePanel')
+          })
+        .catch(error => {
+          this.errorMessage = error.response.data
+          });
     },
 
     closePanel() {
@@ -96,7 +134,16 @@ export default {
 
     removeEvent() {
       this.$store.commit('removeEvent')
-      this.$store.commit('closePanel')
+      let id = this.$store.state.currentId
+      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/delete.php', {id:id},
+       {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+        .then(response => {
+          console.log(response)
+          this.$store.commit('closePanel')
+          })
+        .catch(error => {
+          this.errorMessage = error.response.data
+          });
 
     },
 
@@ -146,6 +193,7 @@ export default {
 
 .error-msg.open {
     display: block;
+    text-align: center;
 }
 
 .selected-date {

@@ -1,17 +1,22 @@
+// import { includes } from 'core-js/core/array';
 import { createStore } from 'vuex'
+// import axios from 'axios'
+
 
 export default createStore({
   state: {
     open:false,
     isNew:true,
 
-    eventId:[],
+    eventIndex:[],
     dateId:[],
     currentId:[],
+    currentEventIndex:[],
 
 
     eventData:[],
     eventInfo:{
+      id:null,
       date:null,
       title:null,
       start_time:null,
@@ -30,34 +35,27 @@ export default createStore({
     },
     // 創建event後建立ID，並將資料存在eventData陣列裡
     create(state) {
-      if (state.eventInfo.start_time < state.eventInfo.end_time) {
+      if (state.eventInfo.start_time < state.eventInfo.end_time 
+        && state.eventInfo.title!=null
+        && state.eventInfo.start_time!=null  && state.eventInfo.end_time!=null) {
         state.eventInfo.date = state.dateId;  //dateId代表每個事件的date日期
-        state.eventId = state.eventData.length;  //創建event時給予id
-        state.eventData[state.eventId] = Object.assign({}, state.eventInfo);
-        state.eventInfo = {
-          date:null,
-          title:null,
-          start_time:null,
-          end_time:null,
-          description:null
-        };
-      }
-
-      else {
-        alert('error');
+        state.eventIndex = state.eventData.length;  //創建event時給予index
+        state.eventData[state.eventIndex] = Object.assign({}, state.eventInfo);
+             
       }
 
       console.log(state.eventData);
 
     },
 
-    // Update(state) {
+    
 
-    // },
+
 
     newPanel (state) {
       state.isNew = true;
       state.eventInfo = {
+        id:null,
         date:null,
         title:null,
         start_time:null,
@@ -65,7 +63,7 @@ export default createStore({
         description:null
   
       };
-      console.log(state.eventData);
+
 
     },
 
@@ -86,7 +84,7 @@ export default createStore({
     removeEvent(state) {
       var result = confirm('Do you really want to delete?');
       if (result) {
-        state.eventData.splice(state.currentId, 1);
+        state.eventData.splice(state.currentEventIndex, 1);
       }
     },
 
@@ -94,6 +92,25 @@ export default createStore({
 
   },
   actions: {
+    // createAPI(context, state) {
+    //   axios.post('http://localhost:8080/demo_hw/vue_calendar/event/create.php', {
+    //       title: state.eventInfo.title,
+    //       start_time: state.eventInfo.start_time,
+    //       end_time: state.eventInfo.end_time,
+    //       description: state.eventInfo.description,
+    //       date: state.eventInfo.date,
+    //     }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+    //     .then(function() {
+    //       //success
+    //       // alert(response.output.message)
+    //       context.commit('create')
+    //       context.commit('closePanel')
+    //     })
+    //     .catch(function(error) {
+    //       console.log(error.response)
+    //     })
+    // }
+
   },
   modules: {
   }

@@ -11,6 +11,7 @@ import panel from './components/panel.vue'
 
 
 
+
 export default {
   name: 'App',
   components: {
@@ -32,7 +33,7 @@ export default {
       this.$store.state.dateId = val.id
       this.xposition = val.xpos
       this.yposition = val.ypos
-      console.log(this.$store.state.dateId)
+
      
     },
     timeformate() {
