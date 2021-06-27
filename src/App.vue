@@ -33,6 +33,7 @@ export default {
       this.$store.state.dateId = val.id
       this.xposition = val.xpos
       this.yposition = val.ypos
+      console.log(this.yposition)
 
      
     },
@@ -56,5 +57,6 @@ export default {
     text-align: center;
 
 }
+
 
 </style>

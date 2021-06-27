@@ -48,7 +48,7 @@ if ($statement->execute()) {
     $statement->execute();
     $event = $statement->fetch(PDO::FETCH_ASSOC);
     
-    // 10:10:00
+    // 10:10:00 => 10:00 don't need the second
     $event['start_time'] = substr($event['start_time'], 0, 5);
 
         

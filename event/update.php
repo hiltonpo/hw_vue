@@ -2,6 +2,7 @@
 header('Content-Type: application/json; charset=utf-8');
 include('db.php');
 include('HTTPStatusCode.php');
+$data = json_decode(file_get_contents("php://input"), true);
 
 try {
      $pdo = new PDO("mysql:host=$db[host];dbname=$db[dbname];port=$db[port];charset=$db[charset]", 
@@ -14,9 +15,14 @@ try {
 // validation
 // title
 if (empty($data['title'])) {
-    //error
-    new HttpStatusCode(400, 'Title cannot be blank.');
-}
+  new HttpStatusCode(400, 'Title cannot be blank.');}
+  // start_time
+  elseif(empty($data['start_time'])) {
+    new HttpStatusCode(400, 'Please select start time.');}
+    // end_time
+    elseif(empty($data['end_time'])) {
+      new HttpStatusCode(400, 'Please select end time.');}
+      
 // time range
 $startTime = explode(':', $data['start_time']);
 $endTime = explode(':', $data['end_time']);

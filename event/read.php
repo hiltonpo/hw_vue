@@ -19,10 +19,15 @@ $sql = 'SELECT id, `date`, title, start_time, end_time, `description` FROM event
 $statement = $pdo->prepare($sql);
 $statement->execute();
 
+
 while ($result = $statement->fetch(PDO::FETCH_ASSOC)) {
-     
+
+         // 10:10:00 => 10:00 don't need the second
+     $result['start_time'] = substr($result['start_time'], 0, 5);
      $event[] = $result;
 }
+
+
 
 if ($event==false)
   new HTTPStatusCode(400, 'No such event.');

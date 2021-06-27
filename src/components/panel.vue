@@ -87,7 +87,7 @@ export default {
     },
 
     createEvent() {
-      this.$store.commit('create')
+      // this.$store.commit('create')
 
       // axios call create.php
       axios.post('http://localhost:8080/demo_hw/vue_calendar/event/create.php', {
@@ -95,23 +95,28 @@ export default {
         start_time: this.$store.state.eventInfo.start_time,
         end_time: this.$store.state.eventInfo.end_time,
         description: this.$store.state.eventInfo.description,
-        date: this.$store.state.eventInfo.date,
+        date: this.$store.state.dateId,  //click .date-block save the date(dateId)
         }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
         .then(response => {
           console.log(response)
-          this.$store.state.eventData[this.$store.state.eventIndex].id = response.data['id']
-          this.$store.commit('closePanel')
+          // if eventInfo is correct, then post event into eventData through Database
+          this.$store.state.eventIndex = this.$store.state.eventData.length  // build index of each event 
+          this.$store.state.eventData[this.$store.state.eventIndex] = Object.assign({}, response.data);  // post event into eventData[] array
+          console.log(this.$store.state.eventData);
+          this.$store.commit('closePanel')  // close panel
           })
         .catch(error => {
-          this.errorMessage = error.response.data
+          this.errorMessage = error.response
           });
       
 
     },
 
     updateEvent() {
-      this.$store.commit('updateEvent')
+
+      // axios call update.php
       axios.post('http://localhost:8080/demo_hw/vue_calendar/event/update.php', {
+        id: this.$store.state.currentId,
         title: this.$store.state.eventInfo.title,
         start_time: this.$store.state.eventInfo.start_time,
         end_time: this.$store.state.eventInfo.end_time,
@@ -120,6 +125,7 @@ export default {
         }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
         .then(response => {
           console.log(response)
+          this.$store.state.eventData[this.$store.state.currentEventIndex] = Object.assign({}, this.$store.state.eventInfo);
           this.$store.commit('closePanel')
           })
         .catch(error => {
@@ -133,13 +139,16 @@ export default {
     },
 
     removeEvent() {
-      this.$store.commit('removeEvent')
-      let id = this.$store.state.currentId
+      let id = this.$store.state.currentId // confirm which event want to delete by event's id
       axios.post('http://localhost:8080/demo_hw/vue_calendar/event/delete.php', {id:id},
        {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
         .then(response => {
-          console.log(response)
-          this.$store.commit('closePanel')
+          var result = confirm('Do you really want to delete?');
+          if (result) {
+            this.$store.state.eventData.splice(this.$store.state.currentEventIndex, 1);
+          }                                 // remove event
+          console.log(response) 
+          this.$store.commit('closePanel')  //close panel
           })
         .catch(error => {
           this.errorMessage = error.response.data
@@ -159,8 +168,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #info-panel {
-    position: fixed;
-    width: 280px;
+    position: absolute;
+    width: 270px;
     background: white;
     border: 1px solid #ccc;
 }
@@ -184,6 +193,7 @@ export default {
 }
 
 #info-panel .title, #info-panel .time-picker, #info-panel .description {
+    text-align: center;
     padding: 10px;
 }
 
