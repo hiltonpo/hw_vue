@@ -29,13 +29,11 @@ export default {
   },
   methods:{
     openPanel(val) {
-      this.$store.state.open = val.right
-      this.$store.state.dateId = val.id
+      // this.$store.state.open = val.right
+      // this.$store.state.dateId = val.id
+      this.$store.commit('openPanel', val)  
       this.xposition = val.xpos
-      this.yposition = val.ypos
-      console.log(this.yposition)
-
-     
+      this.yposition = val.ypos   
     },
     timeformate() {
       let newdate = new Date();

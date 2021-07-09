@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import events from './events'
 
 export default {
@@ -109,22 +108,22 @@ export default {
       }
     },
     // ajax call -- read data
-    fetchAlldata() {
-      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/read.php',
+    // fetchAlldata() {
+    //   axios.post('http://localhost:8080/demo_hw/vue_calendar/event/read.php',
       
-      {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
-      .then(response => {
-        console.log(response.data)
-        this.$store.state.eventData = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      });
+    //   {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+    //   .then(response => {
+    //     console.log(response.data)
+    //     this.$store.state.eventData = response.data
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   });
 
-    }
+    // }
   },
   created() {
-    this.fetchAlldata();
+    this.$store.dispatch('fetchAllData')
   },
 
 }

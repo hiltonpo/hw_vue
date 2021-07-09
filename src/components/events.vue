@@ -18,14 +18,10 @@ export default {
   },
   methods: {
     updatePanel(event) {
-      this.$store.state.eventInfo = Object.assign({}, event);
-      this.$store.state.currentEventIndex = this.$store.state.eventData.findIndex(item=> item.id === event.id);
-      this.$store.state.currentId = event.id;
-      console.log(event.id);
-      console.log(this.$store.state.currentEventIndex);
-      this.$store.commit('updatePanel');
-
-
+      this.$store.commit('updatePanel', event);
+      // this.$store.state.eventInfo = Object.assign({}, event);
+      // this.$store.state.currentEventIndex = this.$store.state.eventData.findIndex(item=> item.id === event.id);
+      // this.$store.state.currentId = event.id;
     },
 
 

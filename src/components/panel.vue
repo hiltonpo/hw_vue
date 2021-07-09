@@ -8,8 +8,8 @@
           <label>evenet</label>
           <input type="text" name="title" v-model="$store.state.eventInfo.title"/>
         </div>
-        <div class="error-msg" :class="[errorMessage ? 'open' : '']">
-          <div class="alert alert-danger">{{errorMessage}}</div>
+        <div class="error-msg" :class="[$store.state.errorMessage ? 'open' : '']">
+          <div class="alert alert-danger">{{$store.state.errorMessage}}</div>
           
         </div>
         <div class="time-picker">
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 
 
 export default {  
@@ -59,7 +59,7 @@ export default {
       },
       currentMonth:[],
       currentDate:this.$store.state.dateId,
-      errorMessage:'',
+
 
 
 
@@ -87,50 +87,48 @@ export default {
     },
 
     createEvent() {
-      // this.$store.commit('create')
-
-      // axios call create.php
-      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/create.php', {
-        title: this.$store.state.eventInfo.title,
-        start_time: this.$store.state.eventInfo.start_time,
-        end_time: this.$store.state.eventInfo.end_time,
-        description: this.$store.state.eventInfo.description,
-        date: this.$store.state.dateId,  //click .date-block save the date(dateId)
-        }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
-        .then(response => {
-          console.log(response)
-          // if eventInfo is correct, then post event into eventData through Database
-          this.$store.state.eventIndex = this.$store.state.eventData.length  // build index of each event 
-          this.$store.state.eventData[this.$store.state.eventIndex] = Object.assign({}, response.data);  // post event into eventData[] array
-          console.log(this.$store.state.eventData);
-          this.$store.commit('closePanel')  // close panel
-          })
-        .catch(error => {
-          this.errorMessage = error.response
-          });
-      
-
+      this.$store.dispatch('createEventUI')
+      // // axios call create.php
+      // axios.post('http://localhost:8080/demo_hw/vue_calendar/event/create.php', {
+      //   title: this.$store.state.eventInfo.title,
+      //   start_time: this.$store.state.eventInfo.start_time,
+      //   end_time: this.$store.state.eventInfo.end_time,
+      //   description: this.$store.state.eventInfo.description,
+      //   date: this.$store.state.dateId,  //click .date-block save the date(dateId)
+      //   }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+      //   .then(response => {
+      //     console.log(response)
+      //     // if eventInfo is correct, then post event into eventData through Database
+      //     this.$store.state.eventIndex = this.$store.state.eventData.length  // build index of each event 
+      //     this.$store.state.eventData[this.$store.state.eventIndex] = Object.assign({}, response.data);  // post event into eventData[] array
+      //     console.log(this.$store.state.eventData);
+      //     this.$store.commit('closePanel')  // close panel
+      //     })
+      //   .catch(error => {
+      //     this.errorMessage = error.response
+      //     });
     },
 
     updateEvent() {
-
-      // axios call update.php
-      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/update.php', {
-        id: this.$store.state.currentId,
-        title: this.$store.state.eventInfo.title,
-        start_time: this.$store.state.eventInfo.start_time,
-        end_time: this.$store.state.eventInfo.end_time,
-        description: this.$store.state.eventInfo.description,
-        date: this.$store.state.eventInfo.date,
-        }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
-        .then(response => {
-          console.log(response)
-          this.$store.state.eventData[this.$store.state.currentEventIndex] = Object.assign({}, this.$store.state.eventInfo);
-          this.$store.commit('closePanel')
-          })
-        .catch(error => {
-          this.errorMessage = error.response.data
-          });
+      this.$store.dispatch('updateEventUI')
+      // // axios call update.php
+      // axios.post('http://localhost:8080/demo_hw/vue_calendar/event/update.php', {
+      //   id: this.$store.state.currentId,
+      //   title: this.$store.state.eventInfo.title,
+      //   start_time: this.$store.state.eventInfo.start_time,
+      //   end_time: this.$store.state.eventInfo.end_time,
+      //   description: this.$store.state.eventInfo.description,
+      //   date: this.$store.state.eventInfo.date,
+      //   }, {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+      //   .then(response => {
+      //     console.log(response)
+      //     this.$store.state.eventData[this.$store.state.currentEventIndex] = Object.assign({}, this.$store.state.eventInfo);
+      //     this.$store.commit('closePanel')
+      //     })
+      //   .catch(error => {
+      //     this.errorMessage = error.response.data
+      //     });
+      
     },
 
     closePanel() {
@@ -139,21 +137,21 @@ export default {
     },
 
     removeEvent() {
-      let id = this.$store.state.currentId // confirm which event want to delete by event's id
-      axios.post('http://localhost:8080/demo_hw/vue_calendar/event/delete.php', {id:id},
-       {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
-        .then(response => {
-          var result = confirm('Do you really want to delete?');
-          if (result) {
-            this.$store.state.eventData.splice(this.$store.state.currentEventIndex, 1);
-          }                                 // remove event
-          console.log(response) 
-          this.$store.commit('closePanel')  //close panel
-          })
-        .catch(error => {
-          this.errorMessage = error.response.data
-          });
-
+      this.$store.dispatch('removeEventUI')
+      // let id = this.$store.state.currentId // confirm which event want to delete by event's id
+      // axios.post('http://localhost:8080/demo_hw/vue_calendar/event/delete.php', {id:id},
+      //  {headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}})
+      //   .then(response => {
+      //     var result = confirm('Do you really want to delete?');
+      //     if (result) {
+      //       this.$store.state.eventData.splice(this.$store.state.currentEventIndex, 1);
+      //     }                                 // remove event
+      //     console.log(response) 
+      //     this.$store.commit('closePanel')  //close panel
+      //     })
+      //   .catch(error => {
+      //     this.errorMessage = error.response.data
+      //     });
     },
 
 
