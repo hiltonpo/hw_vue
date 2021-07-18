@@ -63,6 +63,26 @@ export default createStore({
       console.log(state.currentEventIndex); 
     },
     
+    // use Vuex in strict mode
+    updateInfoTitle (state, title) {
+      state.eventInfo.title = title
+    },
+
+    updateInfoStartTime (state, start_time) {
+      state.eventInfo.start_time = start_time
+    },
+
+    updateInfoEndTime (state, end_time) {
+      state.eventInfo.end_time = end_time
+    },
+
+    updateInfoDescription (state, description) {
+      state.eventInfo.description = description
+    },
+    
+
+
+
     // updateEvent(state) {
     //   if (state.eventInfo.start_time < state.eventInfo.end_time
     //     && state.eventInfo.title!=null

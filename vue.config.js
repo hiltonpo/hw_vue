@@ -1,6 +1,6 @@
 module.exports = {
     devServer: {
-      proxy:'http://localhost/'
+      proxy:'http://localhost:8888/'
         // '^/event/':{
           // target:'http://localhost',
           // pathRewrite: {'^/event/':'/event/'},
