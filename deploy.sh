@@ -9,6 +9,6 @@ cd dist
 git init 
 git add -A
 git commit -m 'deploy'
-# 部署到 https://github.com/hiltonpo/hw_vue 分支為 gh-pages
-git push -f https://github.com/hiltonpo/hw_vue master:gh-pages
+# 部署到 https://github.com/hiltonpo/vue_calendar 分支為 gh-pages
+git push -f https://github.com/hiltonpo/vue_calendar master:gh-pages
 cd -
