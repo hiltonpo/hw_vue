@@ -12,6 +12,6 @@ module.exports = {
   
     },
     publicPath: process.env.NODE_ENV === 'production'
-    ? '/hw_vue/'
+    ? '/vue_calendar/'
     : '/'
   }
